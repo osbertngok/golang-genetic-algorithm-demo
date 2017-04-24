@@ -2,6 +2,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"errors"
 )
 
 func readRobberShare(bnp *BankNoteProblem) {
@@ -39,8 +40,9 @@ func readBankNoteDecks(bnp *BankNoteProblem) {
 	}
 }
 
-func validateBankNoteProblem(bnp *BankNoteProblem)(bool) {
-	return true
+func validateBankNoteProblem(bnp *BankNoteProblem)(error) {
+	// Do nothing
+	return errors.New("Something is wrong")
 }
 
 func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
@@ -53,5 +55,6 @@ func main() {
     // input
     readRobberShare(&bnp)
     readBankNoteDecks(&bnp)
+    _ = validateBankNoteProblem(&bnp)
     // output
 }
