@@ -42,7 +42,11 @@ func readBankNoteDecks(bnp *BankNoteProblem) {
 
 func validateBankNoteProblem(bnp *BankNoteProblem)(error) {
 	// Do nothing
-	return nil
+	if true {
+		return nil
+	} else {
+		return errors.New("something is not right")
+	}
 }
 
 func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
