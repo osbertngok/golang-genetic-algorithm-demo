@@ -59,6 +59,7 @@ func validateBankNoteProblem(bnp *BankNoteProblem)(error) {
 
 func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
 	var bns BankNoteSolution
+	
 	return bns
 }
 
