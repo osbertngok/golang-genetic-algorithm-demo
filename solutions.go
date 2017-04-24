@@ -57,3 +57,7 @@ func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
 	}
 	return bns
 }
+
+func getGeneticAlgorithmSolution(bnp *BankNoteProblem)(BankNoteSolution) {
+	return BankNoteSolution{}
+}
