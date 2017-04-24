@@ -41,12 +41,20 @@ func readBankNoteDecks(bnp *BankNoteProblem) {
 }
 
 func validateBankNoteProblem(bnp *BankNoteProblem)(error) {
-	// Do nothing
-	if true {
-		return nil
-	} else {
-		return errors.New("something is not right")
+	sumOfRobberShare := 0
+	for _, element := range bnp.robberShare {
+		sumOfRobberShare += element
 	}
+	sumOfBankNotes := 0
+	for _, element := range bnp.bankNoteDecks {
+		sumOfBankNotes += element.quantity
+	}
+
+	if sumOfRobberShare != sumOfBankNotes {
+		return errors.New("quantity does not match")
+	}
+
+	return nil
 }
 
 func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {

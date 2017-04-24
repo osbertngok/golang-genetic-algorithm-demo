@@ -23,6 +23,8 @@ func Test_validateBankNoteProblem_success(t *testing.T) {
 	if err != nil {
 		t.Log("error but not expected!")
 		t.Fail()
+	} else {
+		t.Log("Good!")
 	}
 }
 
@@ -42,7 +44,9 @@ func Test_validateBankNoteProblem_failed(t *testing.T) {
 		BankNoteDeck{100, 10}}
 	bnp.bankNoteDecks = bankNoteDecksArray[:]
 	err := validateBankNoteProblem(&bnp)
-	if err == nil {
+	if err != nil {
+		t.Log("Good!")
+	} else {
 		t.Log("Expected to be error!")
 		t.Fail()
 	}
