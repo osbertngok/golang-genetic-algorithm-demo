@@ -4,6 +4,47 @@ import (
 	"testing"
 )
 
+var TESTSBNP = [1]BankNoteProblem{
+	BankNoteProblem{
+		[]int{
+			10,
+			20,
+			30},
+		[]BankNoteDeck{
+			BankNoteDeck{1, 5},
+			BankNoteDeck{5, 10},
+			BankNoteDeck{10, 10},
+			BankNoteDeck{20, 20},
+			BankNoteDeck{50, 5},
+			BankNoteDeck{100, 10}}}}
+
+var TESTSBNS = [1]BankNoteSolution{
+	BankNoteSolution{[]RobberAccount{
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 5},
+				BankNoteDeck{5, 5},
+				BankNoteDeck{10, 0},
+				BankNoteDeck{20, 0},
+				BankNoteDeck{50, 0},
+				BankNoteDeck{100, 0}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 0},
+				BankNoteDeck{5, 5},
+				BankNoteDeck{10, 10},
+				BankNoteDeck{20, 5},
+				BankNoteDeck{50, 0},
+				BankNoteDeck{100, 0}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 0},
+				BankNoteDeck{5, 0},
+				BankNoteDeck{10, 0},
+				BankNoteDeck{20, 15},
+				BankNoteDeck{50, 5},
+				BankNoteDeck{100, 10}}}}}}
+
 func Test_validateBankNoteProblem_success(t *testing.T) {
 	var bnp BankNoteProblem
 	bnp.robberShare = []int{
@@ -51,23 +92,8 @@ func Test_validateBankNoteProblem_failed(t *testing.T) {
 }
 
 func Test_DefaultSolution_1(t *testing.T) {
-	var bnp BankNoteProblem
-	bnp.robberShare = []int{
-		10,
-		20,
-		30}
-	bnp.bankNoteDecks = []BankNoteDeck{
-		BankNoteDeck{1, 5},
-		BankNoteDeck{5, 10},
-		BankNoteDeck{10, 10},
-		BankNoteDeck{20, 20},
-		BankNoteDeck{50, 5},
-		BankNoteDeck{100, 10}}
+	bnp := TESTSBNP[0]
 	bns := getDefaultSolution(&bnp)
-	if len(bns.robberAccounts) != len(bnp.robberShare) {
-		t.Log("RobberAccounts No. != RobberShare No.")
-		t.Fail()
-	}
 	expectedBns := BankNoteSolution{[]RobberAccount{
 		RobberAccount{
 			[]BankNoteDeck{
@@ -93,27 +119,17 @@ func Test_DefaultSolution_1(t *testing.T) {
 				BankNoteDeck{20, 15},
 				BankNoteDeck{50, 5},
 				BankNoteDeck{100, 10}}}}}
-	for i := 0; i < len(bns.robberAccounts); i++ {
-		robberAccount1 := bns.robberAccounts[i]
-		robberAccount2 := expectedBns.robberAccounts[i]
-		for j := 0; j < len(bnp.bankNoteDecks); j++ {
-			bankNoteDeck1 := robberAccount1.bankNoteDecks[j]
-			bankNoteDeck2 := robberAccount2.bankNoteDecks[j]
-			if (bankNoteDeck1.faceValue != bankNoteDeck2.faceValue) {
-				t.Logf("face value mismatched, %d:%d - %f, %f", i, j, bankNoteDeck1.faceValue, bankNoteDeck2.faceValue)
-				t.Fail()
-			}
-
-			if (bankNoteDeck1.quantity != bankNoteDeck2.quantity) {
-				t.Logf("quantity mismatched, %d:%d - %d, %d", i, j, bankNoteDeck1.quantity, bankNoteDeck2.quantity)
-				t.Fail()
-			}
-		}
-	}
+	validateBnsEqual(t, &bnp, &bns, &expectedBns)
 
 	err := validateBankNoteSolution(&bnp, &bns)
 	if err != nil {
 		t.Log(err)
 		t.Fail()
 	}
+}
+
+func Test_GASolution_1(t *testing.T) {
+	bnp := TESTSBNP[0]
+	bns := getGeneticAlgorithmSolution(&bnp)
+	validateBnsEqual(t, &bnp, &bns, &TESTSBNS[0])
 }
