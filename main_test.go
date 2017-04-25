@@ -110,4 +110,10 @@ func Test_DefaultSolution_1(t *testing.T) {
 			}
 		}
 	}
+
+	err := validateBankNoteSolution(&bnp, &bns)
+	if err != nil {
+		t.Log(err)
+		t.Fail()
+	}
 }
