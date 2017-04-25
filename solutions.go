@@ -8,10 +8,10 @@ func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
 	var deckRemaining int
 	// Initilization
 	bns.robberAccounts = make([]RobberAccount, len(bnp.robberShare))
-	for index, _ := range bns.robberAccounts {
+	for index := 0; index < len(bns.robberAccounts); index++ {
 		bns.robberAccounts[index] = RobberAccount{make([]BankNoteDeck, len(bnp.bankNoteDecks))}
-		for index2, _ := range bns.robberAccounts[index].bankNoteDecks {
-			bns.robberAccounts[index].bankNoteDecks[index2] = BankNoteDeck{0.0, 0}
+		for index2, element := range bnp.bankNoteDecks {
+			bns.robberAccounts[index].bankNoteDecks[index2] = BankNoteDeck{element.faceValue, 0}
 		}
 	}
 	robberPointer = 0
@@ -23,7 +23,6 @@ func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
 		deckEmptyFlag := false
 		// Use pointer because it is a struct
 		deck := &bns.robberAccounts[robberPointer].bankNoteDecks[deckPointer]
-		deck.faceValue = bnp.bankNoteDecks[deckPointer].faceValue
 		if robberRemaining > deckRemaining {
 			deck.quantity = deckRemaining
 			robberRemaining -= deckRemaining
