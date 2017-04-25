@@ -100,12 +100,12 @@ func Test_DefaultSolution_1(t *testing.T) {
 			bankNoteDeck1 := robberAccount1.bankNoteDecks[j]
 			bankNoteDeck2 := robberAccount2.bankNoteDecks[j]
 			if (bankNoteDeck1.faceValue != bankNoteDeck2.faceValue) {
-				t.Log("face value mismatched")
+				t.Logf("face value mismatched, %d:%d - %f, %f", i, j, bankNoteDeck1.faceValue, bankNoteDeck2.faceValue)
 				t.Fail()
 			}
 
 			if (bankNoteDeck1.quantity != bankNoteDeck2.quantity) {
-				t.Log("quantity mismatched")
+				t.Logf("quantity mismatched, %d:%d - %d, %d", i, j, bankNoteDeck1.quantity, bankNoteDeck2.quantity)
 				t.Fail()
 			}
 		}

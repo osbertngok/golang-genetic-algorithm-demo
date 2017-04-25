@@ -21,7 +21,8 @@ func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
 	for robberPointer < len(bnp.robberShare) {
 		robberEmptyFlag := false
 		deckEmptyFlag := false
-		deck := bns.robberAccounts[robberPointer].bankNoteDecks[deckPointer]
+		// Use pointer because it is a struct
+		deck := &bns.robberAccounts[robberPointer].bankNoteDecks[deckPointer]
 		deck.faceValue = bnp.bankNoteDecks[deckPointer].faceValue
 		if robberRemaining > deckRemaining {
 			deck.quantity = deckRemaining
@@ -36,6 +37,9 @@ func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
 			// rollover
 			robberEmptyFlag = true
 		} else {
+			deck.quantity = deckRemaining
+			deckRemaining = 0
+			robberRemaining = 0
 			deckEmptyFlag = true
 			robberEmptyFlag = true
 		}
