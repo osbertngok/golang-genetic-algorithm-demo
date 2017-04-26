@@ -1,6 +1,6 @@
 package main
 
-func getDefaultSolution(bnp *BankNoteProblem)(BankNoteSolution) {
+func (bnp *BankNoteProblem) getDefaultSolution() BankNoteSolution {
 	var bns BankNoteSolution
 	var robberPointer int
 	var robberRemaining int

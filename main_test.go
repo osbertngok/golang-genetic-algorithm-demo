@@ -93,7 +93,7 @@ func Test_validateBankNoteProblem_failed(t *testing.T) {
 
 func Test_DefaultSolution_1(t *testing.T) {
 	bnp := TESTSBNP[0]
-	bns := getDefaultSolution(&bnp)
+	bns := bnp.getDefaultSolution()
 	expectedBns := BankNoteSolution{[]RobberAccount{
 		RobberAccount{
 			[]BankNoteDeck{
@@ -130,6 +130,6 @@ func Test_DefaultSolution_1(t *testing.T) {
 
 func Test_GASolution_1(t *testing.T) {
 	bnp := TESTSBNP[0]
-	bns := getGeneticAlgorithmSolution(&bnp)
+	bns := bnp.getGeneticAlgorithmSolution()
 	validateBnsEqual(t, &bnp, &bns, &TESTSBNS[0])
 }

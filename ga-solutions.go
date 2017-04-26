@@ -4,7 +4,7 @@ import "math"
 import "math/rand"
 import "time"
 
-func bankNoteSolutionClone(bns *BankNoteSolution)(BankNoteSolution) {
+func (bns *BankNoteSolution) clone() BankNoteSolution {
 	robberAccounts := make([]RobberAccount, len(bns.robberAccounts))
 	for _, robberAccount := range bns.robberAccounts {
 		bankNoteDecks := make([]BankNoteDeck, len(robberAccount.bankNoteDecks))
@@ -13,7 +13,7 @@ func bankNoteSolutionClone(bns *BankNoteSolution)(BankNoteSolution) {
 	return BankNoteSolution{robberAccounts}
 }
 
-func mutateBankNoteSolution(bns *BankNoteSolution) {
+func (bns *BankNoteSolution) mutate() {
 	rand.Seed(time.Now().UnixNano())
 	maxMutateCount := 10
 	maxAttemptCount := 100
@@ -56,11 +56,11 @@ func mutateBankNoteSolution(bns *BankNoteSolution) {
 	}
 }
 
-func evaluateBankNoteSolution(bns *BankNoteSolution)(float32) {
+func (bns *BankNoteSolution) evaluate() float64 {
 	return 0
 }
 
-func getGeneticAlgorithmSolution(bnp *BankNoteProblem)(BankNoteSolution) {
-	solution := getDefaultSolution(bnp)
+func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
+	solution := bnp.getDefaultSolution()
 	return solution
 }
