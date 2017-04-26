@@ -22,7 +22,7 @@ var TESTSBNS = [1]BankNoteSolution{
 	BankNoteSolution{[]RobberAccount{
 		RobberAccount{
 			[]BankNoteDeck{
-				BankNoteDeck{1, 5},
+				BankNoteDeck{1, 0},
 				BankNoteDeck{5, 5},
 				BankNoteDeck{10, 0},
 				BankNoteDeck{20, 0},
@@ -30,7 +30,7 @@ var TESTSBNS = [1]BankNoteSolution{
 				BankNoteDeck{100, 0}}},
 		RobberAccount{
 			[]BankNoteDeck{
-				BankNoteDeck{1, 0},
+				BankNoteDeck{1, 5},
 				BankNoteDeck{5, 5},
 				BankNoteDeck{10, 10},
 				BankNoteDeck{20, 5},
