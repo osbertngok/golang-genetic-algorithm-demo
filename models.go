@@ -1,7 +1,7 @@
 package main
 
 type BankNoteDeck struct {
-	faceValue float32
+	faceValue float64
 	quantity int
 }
 

@@ -3,6 +3,7 @@ package main
 import "math"
 import "math/rand"
 import "time"
+import "errors"
 
 func (bns *BankNoteSolution) clone() BankNoteSolution {
 	robberAccounts := make([]RobberAccount, len(bns.robberAccounts))
@@ -56,8 +57,37 @@ func (bns *BankNoteSolution) mutate() {
 	}
 }
 
-func (bns *BankNoteSolution) evaluate() float64 {
-	return 0
+func averageFaceValue(bankNoteDecks *[]BankNoteDeck) (float64, error) {
+	sumOfCashValue := 0.0
+	sumOfQuantity := 0
+	for _, deck := range *bankNoteDecks {
+		sumOfCashValue += deck.faceValue * float64(deck.quantity)
+		sumOfQuantity += deck.quantity
+	}
+	if sumOfQuantity == 0 {
+		return 0, errors.New("no bank note in deck")
+	}
+	return sumOfCashValue / float64(sumOfQuantity), nil
+}
+
+func (bnp *BankNoteProblem) evaluate(bns *BankNoteSolution) (float64, error) {
+	sumOfAverageFaceValueDifferenceSquare := 0.0
+	count := 0
+	totalAverageFaceValue, err := averageFaceValue(&bnp.bankNoteDecks)
+	if err != nil {
+		return 0.0, err
+	}
+
+	for _, robberAccount := range bns.robberAccounts {
+		averageFaceValue, err := averageFaceValue(&robberAccount.bankNoteDecks)
+		if err != nil {
+			continue
+		}
+		sumOfAverageFaceValueDifferenceSquare += math.Pow(averageFaceValue - totalAverageFaceValue, 2.0)
+		count++
+	}
+
+	return sumOfAverageFaceValueDifferenceSquare, nil
 }
 
 func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
