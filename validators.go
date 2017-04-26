@@ -3,7 +3,7 @@ import (
 	"errors"
 )
 
-func validateBankNoteProblem(bnp *BankNoteProblem)(error) {
+func (bnp *BankNoteProblem)validate() error {
 	sumOfRobberShare := 0
 	for _, element := range bnp.robberShare {
 		sumOfRobberShare += element
@@ -20,7 +20,7 @@ func validateBankNoteProblem(bnp *BankNoteProblem)(error) {
 	return nil
 }
 
-func validateBankNoteSolution(bnp *BankNoteProblem, bns *BankNoteSolution)(error) {
+func (bns *BankNoteSolution) validate(bnp *BankNoteProblem) error {
 	// No. of robber check
 	noOfRobbersInBnp := len(bnp.robberShare)
 	noOfBankNoteDecksInBnp := len(bnp.bankNoteDecks)

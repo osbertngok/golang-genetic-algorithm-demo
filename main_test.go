@@ -58,7 +58,7 @@ func Test_validateBankNoteProblem_success(t *testing.T) {
 		BankNoteDeck{20, 20},
 		BankNoteDeck{50, 5},
 		BankNoteDeck{100, 10}}
-	err := validateBankNoteProblem(&bnp)
+	err := bnp.validate()
 	if err != nil {
 		t.Log("error but not expected!")
 		t.Fail()
@@ -82,7 +82,7 @@ func Test_validateBankNoteProblem_failed(t *testing.T) {
 		BankNoteDeck{50, 5},
 		BankNoteDeck{100, 10}}
 	bnp.bankNoteDecks = bankNoteDecksArray[:]
-	err := validateBankNoteProblem(&bnp)
+	err := bnp.validate()
 	if err != nil {
 		t.Log("Good!")
 	} else {
@@ -121,7 +121,7 @@ func Test_DefaultSolution_1(t *testing.T) {
 				BankNoteDeck{100, 10}}}}}
 	validateBnsEqual(t, &bnp, &bns, &expectedBns)
 
-	err := validateBankNoteSolution(&bnp, &bns)
+	err := bns.validate(&bnp)
 	if err != nil {
 		t.Log(err)
 		t.Fail()

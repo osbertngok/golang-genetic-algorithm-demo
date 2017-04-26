@@ -5,6 +5,6 @@ func main() {
     // input
     readRobberShare(&bnp)
     readBankNoteDecks(&bnp)
-    _ = validateBankNoteProblem(&bnp)
+    _ = bnp.validate()
     // output
 }
