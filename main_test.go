@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-var TESTSBNP = [2]BankNoteProblem{
+var TESTSBNP = [3]BankNoteProblem{
 	BankNoteProblem{
 		[]int{
 			10,
@@ -27,9 +27,19 @@ var TESTSBNP = [2]BankNoteProblem{
 		[]BankNoteDeck{
 			BankNoteDeck{1, 20},
 			BankNoteDeck{72, 50},
-			BankNoteDeck{100, 30}}}}
+			BankNoteDeck{100, 30}}},
+	BankNoteProblem{
+		[]int{
+			13,
+			15,
+			18,
+			20},
+		[]BankNoteDeck{
+			BankNoteDeck{2.56, 20},
+			BankNoteDeck{3.72, 20},
+			BankNoteDeck{4.55, 26}}}}
 
-var TESTSBNS = [2]BankNoteSolution{
+var TESTSBNS = [3]BankNoteSolution{
 	
 	BankNoteSolution{[]RobberAccount{
 		RobberAccount{
@@ -76,7 +86,28 @@ var TESTSBNS = [2]BankNoteSolution{
 			[]BankNoteDeck{
 				BankNoteDeck{1, 8},
 				BankNoteDeck{72, 20},
-				BankNoteDeck{100, 12}}}}}}
+				BankNoteDeck{100, 12}}}}},
+		BankNoteSolution{[]RobberAccount{
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{2.56, 1},
+				BankNoteDeck{3.72, 11},
+				BankNoteDeck{4.55, 1}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{2.56, 6},
+				BankNoteDeck{3.72, 1},
+				BankNoteDeck{4.55, 8}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{2.56, 6},
+				BankNoteDeck{3.72, 4},
+				BankNoteDeck{4.55, 8}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{2.56, 7},
+				BankNoteDeck{3.72, 4},
+				BankNoteDeck{4.55, 9}}}}}}
 
 func Test_validateBankNoteProblem_success(t *testing.T) {
 	var bnp BankNoteProblem
@@ -165,7 +196,7 @@ func Test_DefaultSolution_1(t *testing.T) {
 
 
 func Test_GASolution_1(t *testing.T) {
-	bnp := TESTSBNP[1]
+	bnp := TESTSBNP[2]
 	bns, err := bnp.getGeneticAlgorithmSolution()
 	if err != nil {
 		t.Log(err)
@@ -178,7 +209,7 @@ func Test_GASolution_1(t *testing.T) {
 		t.Fatal()
 	}
 	fmt.Println(bns)
-	if fmt.Sprint(bns) != fmt.Sprint(TESTSBNS[1]) {
+	if fmt.Sprint(bns) != fmt.Sprint(TESTSBNS[2]) {
 		t.Fail()
 	}
 }

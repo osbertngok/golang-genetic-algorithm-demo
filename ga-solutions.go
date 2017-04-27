@@ -99,7 +99,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 	initialSolution := bnp.getDefaultSolution()
 
 	// <Parameters>
-	maxGenerationCount := 100
+	maxGenerationCount := 20
 	maxCandidateCount := 200
 	noOfMutantForEachCandidate := 200
 	intensityFunc := func(generationCount, maxGenerationCount int) float64 {
