@@ -41,7 +41,7 @@ func (bns *BankNoteSolution) hashCode() int64 {
 	return 0
 }
 
-func (bns *BankNoteSolution) mutate() error {
+func (bns *BankNoteSolution) mutate(intensity float64) error {
 	// Edge cases
 	noOfRobbers := len(bns.robberAccounts)
 	if noOfRobbers < 2 {
@@ -56,8 +56,6 @@ func (bns *BankNoteSolution) mutate() error {
 	rand.Seed(time.Now().UnixNano())
 	maxMutateCount := 10
 	maxAttemptCount := 100
-	intensity := 0.1
-	
 
 	for mutateCount, attemptCount := 0, 0; mutateCount < maxMutateCount && attemptCount < maxAttemptCount; attemptCount++ {
 		// Pick two random robbers and a random deck

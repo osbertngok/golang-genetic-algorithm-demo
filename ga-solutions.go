@@ -38,25 +38,6 @@ func (bnp *BankNoteProblem) evaluate(bns *BankNoteSolution) (float64, error) {
 	return sumOfAverageFaceValueDifferenceSquare, nil
 }
 
-func getMutatedBankNoteSolution(original *BankNoteSolution, noOfMutants int) ([]BankNoteSolution, error) {
-	if noOfMutants <= 1 {
-		return nil, errors.New("invalid no of mutants")
-	}
-
-	bankNoteSolutions := make([]BankNoteSolution, noOfMutants)
-	for i := 0; i < noOfMutants; i++ {
-		bankNoteSolution := original.clone()
-		err := bankNoteSolution.mutate()
-		if err != nil {
-			return nil, err
-		}
-		bankNoteSolutions[i] = bankNoteSolution
-	}
-	return bankNoteSolutions, nil
-}
-
-// TODO: getMutatedBankNoteSolution using crossing over
-
 type LessFunc func(*BankNoteSolution, *BankNoteSolution) bool
 
 type bankNoteSolutionSorter struct {
@@ -113,13 +94,29 @@ func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bank
 
 func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, error) {
 	initialSolution := bnp.getDefaultSolution()
+
+	// <Parameters>
 	maxGenerationCount := 10
 	maxCandidateCount := 100
 	noOfMutantForEachCandidate := 1000
+	intensityFunc := func(generationCount, maxGenerationCount int) float64 {
+		return 1.0
+		/*
+		intensity := 1.0 - float64(generationCount) / float64(maxGenerationCount)
+		if intensity < 0.1 {
+			intensity = 0.1
+		}
+		return intensity
+		*/
+	}
+	// </Parameters>
+
+
 	candidateSolutionPool := make([]BankNoteSolution, 1)
 	candidateSolutionPool[0] = initialSolution
 	for generationCount := 0 ;; generationCount++ {
 		noOfCandidates := len(candidateSolutionPool)
+		intensity := intensityFunc(generationCount, maxGenerationCount)
 
 		// Populate the offspring slice
 		offspringSolutionPool := make([]BankNoteSolution, noOfCandidates, noOfCandidates * (noOfMutantForEachCandidate + 1))
@@ -139,7 +136,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 			for j := 0; j < noOfMutantForEachCandidate; j++ {
 				mutant := candidateSolutionPool[i].clone()
 
-				err := mutant.mutate()
+				err := mutant.mutate(intensity)
 				if err != nil {
 					return BankNoteSolution{}, err
 				}

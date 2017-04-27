@@ -188,7 +188,7 @@ func Test_Mutate(t *testing.T) {
 	bnp := TESTSBNP[0]
 	bns := bnp.getDefaultSolution()
 	newBns := bns.clone()
-	newBns.mutate()
+	newBns.mutate(1.0)
 	err := newBns.validate(&bnp)
 	if err != nil {
 		t.Log(err)
