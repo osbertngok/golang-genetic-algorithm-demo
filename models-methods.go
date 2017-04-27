@@ -61,12 +61,22 @@ func (bns *BankNoteSolution) mutate() {
 		// Pick two random robbers and a random deck
  		selectedRobber1 := rand.Intn(noOfRobbers)
  		selectedRobber2 := selectedRobber1
- 		for ;selectedRobber2 != selectedRobber1; {
+ 		for ;selectedRobber2 == selectedRobber1; {
  			selectedRobber2 = rand.Intn(noOfRobbers)
  		}
 
- 		selectedBankNoteDeck := rand.Intn(noOfBankNoteDecks)
- 		remaining := bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck].quantity
+ 		selectedBankNoteDeck1 := rand.Intn(noOfBankNoteDecks)
+ 		selectedBankNoteDeck2 := rand.Intn(noOfBankNoteDecks)
+ 		for ;selectedBankNoteDeck2 == selectedBankNoteDeck1; {
+ 			selectedBankNoteDeck2 = rand.Intn(noOfBankNoteDecks)
+ 		}
+
+ 		remaining1 := bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck1].quantity
+ 		remaining2 := bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck2].quantity
+ 		remaining := remaining1
+ 		if remaining2 < remaining {
+ 			remaining = remaining2
+ 		}
  		if remaining <= 0 {
  			continue
  		}
@@ -82,10 +92,11 @@ func (bns *BankNoteSolution) mutate() {
 	 			moveQuantity = 1
 			}
 		}
- 		
 
- 		bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck].quantity -= moveQuantity
- 		bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck].quantity += moveQuantity
+ 		bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck1].quantity -= moveQuantity
+ 		bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck1].quantity += moveQuantity
+ 		bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck2].quantity -= moveQuantity
+ 		bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck2].quantity += moveQuantity
  		mutateCount++
 	}
 }
@@ -122,7 +133,9 @@ func (bns *BankNoteSolution) validate(bnp *BankNoteProblem) error {
 			quantity += bnd.quantity
 		}
 		if quantity != bnp.robberShare[i] {
-			return errors.New("robber share mismatch")
+			bnpstr := fmt.Sprint(*bnp)
+			bnsstr := fmt.Sprint(*bns)
+			return fmt.Errorf("robber share mismatch, index: %d, bnp: %d, bns: %d, p: %s, s: %s", i, bnp.robberShare[i], quantity, bnpstr, bnsstr)
 		}
 	}
 

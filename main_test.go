@@ -2,6 +2,7 @@ package main
 
 import (
 	"testing"
+	"fmt"
 )
 
 var TESTSBNP = [1]BankNoteProblem{
@@ -159,8 +160,8 @@ func Test_Mutate(t *testing.T) {
 		t.Log(err)
 		t.Fatal()
 	}
-	err = validateBnsEqual(&bnp, &bns, &newBns)
-	if err == nil {
+
+	if fmt.Sprint(bns) == fmt.Sprint(newBns) {
 		t.Log("not expected to be equal")
 		t.Fail()
 	}

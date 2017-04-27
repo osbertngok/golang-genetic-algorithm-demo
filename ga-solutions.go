@@ -110,9 +110,9 @@ func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bank
 
 func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 	initialSolution := bnp.getDefaultSolution()
-	maxGenerationCount := 1
-	maxCandidateCount := 10
-	noOfMutantForEachCandidate := 5
+	maxGenerationCount := 100
+	maxCandidateCount := 100
+	noOfMutantForEachCandidate := 10
 	candidateSolutionPool := make([]*BankNoteSolution, 1)
 	candidateSolutionPool[0] = &initialSolution
 	for generationCount := 0 ;; generationCount++ {
@@ -150,16 +150,8 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 			}
 		}
 
-		// Sort by evalFunc
-		for _, element := range offspringSolutionPool {
-			fmt.Println(*element)
-		}
-		fmt.Println("")
 		sortBankNoteSolutionByEvaluationFunc(bnp, offspringSolutionPool, (*BankNoteProblem).evaluate)
-		for _, element := range offspringSolutionPool {
-			fmt.Println(*element)
-		}
-		fmt.Println("")
+		
 		score, _ := bnp.evaluate(offspringSolutionPool[0])
 		fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
 		if generationCount >= maxGenerationCount {
@@ -172,7 +164,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 			nextGenerationCandidateCount = length
 		}
 
-		candidateSolutionPool := make([]*BankNoteSolution, nextGenerationCandidateCount)
+		candidateSolutionPool = make([]*BankNoteSolution, nextGenerationCandidateCount)
 		copy(candidateSolutionPool, offspringSolutionPool[0 : nextGenerationCandidateCount - 1])
 	}
 	// Not gonna happen
