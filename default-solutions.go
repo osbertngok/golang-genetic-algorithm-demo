@@ -6,7 +6,7 @@ func (bnp *BankNoteProblem) getDefaultSolution() BankNoteSolution {
 	var robberRemaining int
 	var deckPointer int
 	var deckRemaining int
-	// Initilization
+	// Initialization
 	bns.robberAccounts = make([]RobberAccount, len(bnp.robberShare))
 	for index := 0; index < len(bns.robberAccounts); index++ {
 		bns.robberAccounts[index] = RobberAccount{make([]BankNoteDeck, len(bnp.bankNoteDecks))}
