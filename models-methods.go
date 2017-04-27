@@ -4,6 +4,7 @@ import ("math"
 	"math/rand"
 	"time"
 	"errors"
+	"fmt"
 )
 
 // BankNoteProblem methods
@@ -70,11 +71,17 @@ func (bns *BankNoteSolution) mutate() {
  		}
 
  		// Move at least 1 from Robber1 account to Robber2 account
-
- 		moveQuantity := rand.Intn(int(math.Floor(float64(remaining) * intensity)))
- 		if moveQuantity < 1 {
+ 		moveQuantity := 1
+ 		intnParameter := int(math.Floor(float64(remaining) * intensity))
+ 		if intnParameter == 0 {
  			moveQuantity = 1
- 		}
+		} else {
+			moveQuantity = rand.Intn(moveQuantity)
+	 		if moveQuantity < 1 {
+	 			moveQuantity = 1
+			}
+		}
+ 		
 
  		bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck].quantity -= moveQuantity
  		bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck].quantity += moveQuantity
@@ -88,12 +95,16 @@ func (bns *BankNoteSolution) validate(bnp *BankNoteProblem) error {
 	noOfBankNoteDecksInBnp := len(bnp.bankNoteDecks)
 
 	if len(bns.robberAccounts) != noOfRobbersInBnp {
-		return errors.New("robber count mismatch")
+		bnpstr := fmt.Sprint(*bnp)
+		bnsstr := fmt.Sprint(*bns)
+		return fmt.Errorf("robber count mismatch, bnp: %d, bns: %d, p: %s, s: %s", noOfRobbersInBnp, len(bns.robberAccounts), bnpstr, bnsstr)
 	}
 
-	for _, element := range bns.robberAccounts {
+	for index, element := range bns.robberAccounts {
 		if len(element.bankNoteDecks) != noOfBankNoteDecksInBnp {
-			return errors.New("banknotedeck count mismatch")
+			bnpstr := fmt.Sprint(*bnp)
+			bnsstr := fmt.Sprint(*bns)
+			return fmt.Errorf("banknotedeck count mismatch, index: %d, bnp: %d, bns: %d, p: %s, s: %s", index, noOfBankNoteDecksInBnp, len(element.bankNoteDecks), bnpstr, bnsstr)
 		}
 	}
 

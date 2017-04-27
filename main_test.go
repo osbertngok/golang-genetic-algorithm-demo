@@ -128,6 +128,7 @@ func Test_DefaultSolution_1(t *testing.T) {
 	}
 }
 
+/*
 func Test_GASolution_1(t *testing.T) {
 	bnp := TESTSBNP[0]
 	bns := bnp.getGeneticAlgorithmSolution()
@@ -137,4 +138,23 @@ func Test_GASolution_1(t *testing.T) {
 		t.Fatal()
 	}
 	validateBnsEqual(t, &bnp, &bns, &TESTSBNS[0])
+}
+*/
+
+func Test_Mutate(t *testing.T) {
+	bnp := TESTSBNP[0]
+	bns := bnp.getDefaultSolution()
+	bns.mutate()
+	err := bns.validate(&bnp)
+	if err != nil {
+		t.Log(err)
+		t.Fatal()
+	}
+}
+
+func Test_Clone(t *testing.T) {
+	bnp := TESTSBNP[0]
+	bns := bnp.getDefaultSolution()
+	newBns := bns.clone()
+	validateBnsEqual(t, &bnp, &bns, &newBns)
 }

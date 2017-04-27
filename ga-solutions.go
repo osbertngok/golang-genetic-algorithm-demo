@@ -116,6 +116,8 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 	candidateSolutionPool := make([]*BankNoteSolution, 1)
 	candidateSolutionPool[0] = &initialSolution
 	for generationCount := 0 ;; generationCount++ {
+		fmt.Println(*candidateSolutionPool[0])
+		fmt.Println("")
 		noOfCandidates := len(candidateSolutionPool)
 
 		// Populate the offspring slice
@@ -135,7 +137,20 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 		for i := 0; i < noOfCandidates; i++ {
 			for j := 0; j < noOfMutantForEachCandidate; j++ {
 				mutant := candidateSolutionPool[i].clone()
+				// Debug
+				fmt.Println("cloning")
+				err := mutant.validate(bnp)
+				if err != nil {
+					panic(err)
+				}
+
+				fmt.Println("mutating")
 				mutant.mutate()
+				err = mutant.validate(bnp)
+				if err != nil {
+					panic(err)
+				}
+
 				hashCode := fmt.Sprint(mutant)
 				if _, ok := hashCodeMap[hashCode]; ok {
 					// already exists, next;
