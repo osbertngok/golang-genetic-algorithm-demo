@@ -38,16 +38,16 @@ func (bnp *BankNoteProblem) evaluate(bns *BankNoteSolution) (float64, error) {
 	return sumOfAverageFaceValueDifferenceSquare, nil
 }
 
-func getMutatedBankNoteSolution(original *BankNoteSolution, noOfMutants int) ([]*BankNoteSolution, error) {
+func getMutatedBankNoteSolution(original *BankNoteSolution, noOfMutants int) ([]BankNoteSolution, error) {
 	if noOfMutants <= 1 {
 		return nil, errors.New("invalid no of mutants")
 	}
 
-	bankNoteSolutions := make([]*BankNoteSolution, noOfMutants)
+	bankNoteSolutions := make([]BankNoteSolution, noOfMutants)
 	for i := 0; i < noOfMutants; i++ {
 		bankNoteSolution := original.clone()
 		bankNoteSolution.mutate()
-		bankNoteSolutions[i] = &bankNoteSolution
+		bankNoteSolutions[i] = bankNoteSolution
 	}
 	return bankNoteSolutions, nil
 }
@@ -57,11 +57,11 @@ func getMutatedBankNoteSolution(original *BankNoteSolution, noOfMutants int) ([]
 type LessFunc func(*BankNoteSolution, *BankNoteSolution) bool
 
 type bankNoteSolutionSorter struct {
-	bankNoteSolutions []*BankNoteSolution
+	bankNoteSolutions []BankNoteSolution
 	by LessFunc
 }
 
-func (by LessFunc) Sort(bankNoteSolutions []*BankNoteSolution) {
+func (by LessFunc) Sort(bankNoteSolutions []BankNoteSolution) {
 	ss := &bankNoteSolutionSorter{bankNoteSolutions, by}
 	sort.Sort(ss)
 }
@@ -78,10 +78,10 @@ func (s *bankNoteSolutionSorter) Swap(i, j int) {
 }
 
 func (s *bankNoteSolutionSorter) Less(i, j int) bool {
-	return s.by(s.bankNoteSolutions[i], s.bankNoteSolutions[j])
+	return s.by(&s.bankNoteSolutions[i], &s.bankNoteSolutions[j])
 }
 
-func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bankNoteSolutions []*BankNoteSolution, evalFunc func(*BankNoteProblem, *BankNoteSolution) (float64, error)) {
+func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bankNoteSolutions []BankNoteSolution, evalFunc func(*BankNoteProblem, *BankNoteSolution) (float64, error)) {
 	// Make the Less function using evalFunc and closure
 
 	// It is essential that lessFunc is LessFunc, not func(s1, s2 *BankNoteSolution) bool, although we know logically they are the same
@@ -113,15 +113,15 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 	maxGenerationCount := 100
 	maxCandidateCount := 100
 	noOfMutantForEachCandidate := 10
-	candidateSolutionPool := make([]*BankNoteSolution, 1)
-	candidateSolutionPool[0] = &initialSolution
+	candidateSolutionPool := make([]BankNoteSolution, 1)
+	candidateSolutionPool[0] = initialSolution
 	for generationCount := 0 ;; generationCount++ {
-		fmt.Println(*candidateSolutionPool[0])
+		fmt.Println(candidateSolutionPool[0])
 		fmt.Println("")
 		noOfCandidates := len(candidateSolutionPool)
 
 		// Populate the offspring slice
-		offspringSolutionPool := make([]*BankNoteSolution, noOfCandidates, noOfCandidates * (noOfMutantForEachCandidate + 1))
+		offspringSolutionPool := make([]BankNoteSolution, noOfCandidates, noOfCandidates * (noOfMutantForEachCandidate + 1))
 		copy(offspringSolutionPool, candidateSolutionPool)
 		
 		// Reduce duplicates
@@ -146,16 +146,16 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 					continue
 				}
 				hashCodeMap[hashCode] = true
-				offspringSolutionPool = append(offspringSolutionPool, &mutant)
+				offspringSolutionPool = append(offspringSolutionPool, mutant)
 			}
 		}
 
 		sortBankNoteSolutionByEvaluationFunc(bnp, offspringSolutionPool, (*BankNoteProblem).evaluate)
 		
-		score, _ := bnp.evaluate(offspringSolutionPool[0])
+		score, _ := bnp.evaluate(&offspringSolutionPool[0])
 		fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
 		if generationCount >= maxGenerationCount {
-			return *offspringSolutionPool[0]
+			return offspringSolutionPool[0]
 		}
 		
 		// Grab the best of them for next round
@@ -164,7 +164,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 			nextGenerationCandidateCount = length
 		}
 
-		candidateSolutionPool = make([]*BankNoteSolution, nextGenerationCandidateCount)
+		candidateSolutionPool = make([]BankNoteSolution, nextGenerationCandidateCount)
 		copy(candidateSolutionPool, offspringSolutionPool[0 : nextGenerationCandidateCount - 1])
 	}
 	// Not gonna happen

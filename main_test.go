@@ -120,20 +120,18 @@ func Test_DefaultSolution_1(t *testing.T) {
 				BankNoteDeck{20, 15},
 				BankNoteDeck{50, 5},
 				BankNoteDeck{100, 10}}}}}
-	err := validateBnsEqual(&bnp, &bns, &expectedBns)
-	if err != nil {
-		t.Log(err)
+	if fmt.Sprint(bns) != fmt.Sprint(expectedBns) {
 		t.Fail()
 	}
 
-	err = bns.validate(&bnp)
+	err := bns.validate(&bnp)
 	if err != nil {
 		t.Log(err)
 		t.Fail()
 	}
 }
 
-
+/*
 func Test_GASolution_1(t *testing.T) {
 	bnp := TESTSBNP[0]
 	bns := bnp.getGeneticAlgorithmSolution()
@@ -148,7 +146,7 @@ func Test_GASolution_1(t *testing.T) {
 		t.Fail()
 	}
 }
-
+*/
 
 func Test_Mutate(t *testing.T) {
 	bnp := TESTSBNP[0]
@@ -171,9 +169,7 @@ func Test_Clone(t *testing.T) {
 	bnp := TESTSBNP[0]
 	bns := bnp.getDefaultSolution()
 	newBns := bns.clone()
-	err := validateBnsEqual(&bnp, &bns, &newBns)
-	if err != nil {
-		t.Log(err)
+	if fmt.Sprint(bns) != fmt.Sprint(newBns) {
 		t.Fail()
 	}
 }
