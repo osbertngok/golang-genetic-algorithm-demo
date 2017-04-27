@@ -42,6 +42,9 @@ func (bnp *BankNoteProblem) evaluate(bns *BankNoteSolution) (float64, error) {
 	return sumOfAverageFaceValueDifferenceSquare, nil
 }
 
+// LessFunc is a func type that takes two pointers of BankNoteSolution and
+// returns a bool that indicates whether the evaluation result
+// of the first solution is less than the second one.
 type LessFunc func(*BankNoteSolution, *BankNoteSolution) bool
 
 type bankNoteSolutionSorter struct {
@@ -49,6 +52,8 @@ type bankNoteSolutionSorter struct {
 	by                LessFunc
 }
 
+// Sort is a LessFunc method that uses the LessFunc
+// to sort a BankNoteSolution slice.
 func (by LessFunc) Sort(bankNoteSolutions []BankNoteSolution) {
 	ss := &bankNoteSolutionSorter{bankNoteSolutions, by}
 	sort.Sort(ss)
@@ -176,6 +181,4 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 		candidateSolutionPool = make([]BankNoteSolution, nextGenerationCandidateCount)
 		copy(candidateSolutionPool, offspringSolutionPool[0:nextGenerationCandidateCount])
 	}
-	// Not gonna happen
-	return BankNoteSolution{}, errors.New("unknown error")
 }

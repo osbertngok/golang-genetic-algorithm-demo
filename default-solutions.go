@@ -44,7 +44,6 @@ func (bnp *BankNoteProblem) getDefaultSolution() BankNoteSolution {
 		}
 
 		if deckEmptyFlag {
-			deckEmptyFlag = true
 			deckPointer++
 			if deckPointer < len(bnp.bankNoteDecks) {
 				deckRemaining = bnp.bankNoteDecks[deckPointer].quantity
