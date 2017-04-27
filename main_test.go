@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-var TESTSBNP = [1]BankNoteProblem{
+var TESTSBNP = [2]BankNoteProblem{
 	BankNoteProblem{
 		[]int{
 			10,
@@ -17,34 +17,66 @@ var TESTSBNP = [1]BankNoteProblem{
 			BankNoteDeck{10, 10},
 			BankNoteDeck{20, 20},
 			BankNoteDeck{50, 5},
-			BankNoteDeck{100, 10}}}}
+			BankNoteDeck{100, 10}}},
+	BankNoteProblem{
+		[]int{
+			10,
+			20,
+			30,
+			40},
+		[]BankNoteDeck{
+			BankNoteDeck{1, 20},
+			BankNoteDeck{72, 50},
+			BankNoteDeck{100, 30}}}}
 
-var TESTSBNS = [1]BankNoteSolution{
+var TESTSBNS = [2]BankNoteSolution{
+	
 	BankNoteSolution{[]RobberAccount{
 		RobberAccount{
 			[]BankNoteDeck{
-				BankNoteDeck{1, 0},
-				BankNoteDeck{5, 5},
-				BankNoteDeck{10, 0},
-				BankNoteDeck{20, 0},
-				BankNoteDeck{50, 0},
-				BankNoteDeck{100, 0}}},
-		RobberAccount{
-			[]BankNoteDeck{
-				BankNoteDeck{1, 5},
-				BankNoteDeck{5, 5},
-				BankNoteDeck{10, 10},
-				BankNoteDeck{20, 5},
-				BankNoteDeck{50, 0},
-				BankNoteDeck{100, 0}}},
-		RobberAccount{
-			[]BankNoteDeck{
-				BankNoteDeck{1, 0},
+				BankNoteDeck{1, 1},
 				BankNoteDeck{5, 0},
-				BankNoteDeck{10, 0},
-				BankNoteDeck{20, 15},
-				BankNoteDeck{50, 5},
-				BankNoteDeck{100, 10}}}}}}
+				BankNoteDeck{10, 5},
+				BankNoteDeck{20, 0},
+				BankNoteDeck{50, 3},
+				BankNoteDeck{100, 1}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 2},
+				BankNoteDeck{5, 8},
+				BankNoteDeck{10, 4},
+				BankNoteDeck{20, 1},
+				BankNoteDeck{50, 0},
+				BankNoteDeck{100, 5}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 2},
+				BankNoteDeck{5, 2},
+				BankNoteDeck{10, 1},
+				BankNoteDeck{20, 19},
+				BankNoteDeck{50, 2},
+				BankNoteDeck{100, 4}}}}},
+	BankNoteSolution{[]RobberAccount{
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 2},
+				BankNoteDeck{72, 5},
+				BankNoteDeck{100, 3}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 4},
+				BankNoteDeck{72, 10},
+				BankNoteDeck{100, 6}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 6},
+				BankNoteDeck{72, 15},
+				BankNoteDeck{100, 9}}},
+		RobberAccount{
+			[]BankNoteDeck{
+				BankNoteDeck{1, 8},
+				BankNoteDeck{72, 20},
+				BankNoteDeck{100, 12}}}}}}
 
 func Test_validateBankNoteProblem_success(t *testing.T) {
 	var bnp BankNoteProblem
@@ -131,22 +163,26 @@ func Test_DefaultSolution_1(t *testing.T) {
 	}
 }
 
-/*
+
 func Test_GASolution_1(t *testing.T) {
-	bnp := TESTSBNP[0]
-	bns := bnp.getGeneticAlgorithmSolution()
-	err := bns.validate(&bnp)
+	bnp := TESTSBNP[1]
+	bns, err := bnp.getGeneticAlgorithmSolution()
 	if err != nil {
 		t.Log(err)
 		t.Fatal()
 	}
-	err = validateBnsEqual(&bnp, &bns, &TESTSBNS[0])
+
+	err = bns.validate(&bnp)
 	if err != nil {
 		t.Log(err)
+		t.Fatal()
+	}
+	fmt.Println(bns)
+	if fmt.Sprint(bns) != fmt.Sprint(TESTSBNS[1]) {
 		t.Fail()
 	}
 }
-*/
+
 
 func Test_Mutate(t *testing.T) {
 	bnp := TESTSBNP[0]

@@ -41,21 +41,23 @@ func (bns *BankNoteSolution) hashCode() int64 {
 	return 0
 }
 
-func (bns *BankNoteSolution) mutate() {
+func (bns *BankNoteSolution) mutate() error {
+	// Edge cases
+	noOfRobbers := len(bns.robberAccounts)
+	if noOfRobbers < 2 {
+		return fmt.Errorf("Only %d robber accounts found (<2)", noOfRobbers)
+	}
+
+	noOfBankNoteDecks := len(bns.robberAccounts[0].bankNoteDecks)
+	if noOfBankNoteDecks < 2 {
+		return fmt.Errorf("Only %d bank note decks found (<2)", noOfBankNoteDecks)
+	}
+
 	rand.Seed(time.Now().UnixNano())
 	maxMutateCount := 10
 	maxAttemptCount := 100
 	intensity := 0.1
-	noOfRobbers := len(bns.robberAccounts)
-	noOfBankNoteDecks := len(bns.robberAccounts[0].bankNoteDecks)
-	// Edge cases
-	if noOfRobbers < 2 {
-		return
-	}
-
-	if noOfBankNoteDecks < 2 {
-		return
-	}
+	
 
 	for mutateCount, attemptCount := 0, 0; mutateCount < maxMutateCount && attemptCount < maxAttemptCount; attemptCount++ {
 		// Pick two random robbers and a random deck
@@ -99,6 +101,7 @@ func (bns *BankNoteSolution) mutate() {
  		bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck2].quantity += moveQuantity
  		mutateCount++
 	}
+	return nil
 }
 
 func (bns *BankNoteSolution) validate(bnp *BankNoteProblem) error {

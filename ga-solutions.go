@@ -46,7 +46,10 @@ func getMutatedBankNoteSolution(original *BankNoteSolution, noOfMutants int) ([]
 	bankNoteSolutions := make([]BankNoteSolution, noOfMutants)
 	for i := 0; i < noOfMutants; i++ {
 		bankNoteSolution := original.clone()
-		bankNoteSolution.mutate()
+		err := bankNoteSolution.mutate()
+		if err != nil {
+			return nil, err
+		}
 		bankNoteSolutions[i] = bankNoteSolution
 	}
 	return bankNoteSolutions, nil
@@ -108,16 +111,14 @@ func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bank
 	lessFunc.Sort(bankNoteSolutions)
 }
 
-func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
+func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, error) {
 	initialSolution := bnp.getDefaultSolution()
-	maxGenerationCount := 100
+	maxGenerationCount := 10
 	maxCandidateCount := 100
-	noOfMutantForEachCandidate := 10
+	noOfMutantForEachCandidate := 1000
 	candidateSolutionPool := make([]BankNoteSolution, 1)
 	candidateSolutionPool[0] = initialSolution
 	for generationCount := 0 ;; generationCount++ {
-		fmt.Println(candidateSolutionPool[0])
-		fmt.Println("")
 		noOfCandidates := len(candidateSolutionPool)
 
 		// Populate the offspring slice
@@ -138,7 +139,10 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 			for j := 0; j < noOfMutantForEachCandidate; j++ {
 				mutant := candidateSolutionPool[i].clone()
 
-				mutant.mutate()
+				err := mutant.mutate()
+				if err != nil {
+					return BankNoteSolution{}, err
+				}
 
 				hashCode := fmt.Sprint(mutant)
 				if _, ok := hashCodeMap[hashCode]; ok {
@@ -155,18 +159,19 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 		score, _ := bnp.evaluate(&offspringSolutionPool[0])
 		fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
 		if generationCount >= maxGenerationCount {
-			return offspringSolutionPool[0]
+			return offspringSolutionPool[0], nil
 		}
 		
 		// Grab the best of them for next round
 		nextGenerationCandidateCount := maxCandidateCount
-		if length := len(offspringSolutionPool); length < maxCandidateCount {
+		length := len(offspringSolutionPool)
+		if length < maxCandidateCount {
 			nextGenerationCandidateCount = length
 		}
 
 		candidateSolutionPool = make([]BankNoteSolution, nextGenerationCandidateCount)
-		copy(candidateSolutionPool, offspringSolutionPool[0 : nextGenerationCandidateCount - 1])
+		copy(candidateSolutionPool, offspringSolutionPool[0 : nextGenerationCandidateCount])
 	}
 	// Not gonna happen
-	return BankNoteSolution{}
+	return BankNoteSolution{}, errors.New("unknown error")
 }
