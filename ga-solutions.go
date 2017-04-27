@@ -1,11 +1,13 @@
 package main
 
-import ("math"
+import (
 	"errors"
-	"sort"
 	"fmt"
+	"math"
 	"math/rand"
-	"time")
+	"sort"
+	"time"
+)
 
 func averageFaceValue(bankNoteDecks *[]BankNoteDeck) (float64, error) {
 	sumOfCashValue := 0.0
@@ -33,7 +35,7 @@ func (bnp *BankNoteProblem) evaluate(bns *BankNoteSolution) (float64, error) {
 		if err != nil {
 			continue
 		}
-		sumOfAverageFaceValueDifferenceSquare += math.Pow(averageFaceValue - totalAverageFaceValue, 2.0)
+		sumOfAverageFaceValueDifferenceSquare += math.Pow(averageFaceValue-totalAverageFaceValue, 2.0)
 		count++
 	}
 
@@ -44,7 +46,7 @@ type LessFunc func(*BankNoteSolution, *BankNoteSolution) bool
 
 type bankNoteSolutionSorter struct {
 	bankNoteSolutions []BankNoteSolution
-	by LessFunc
+	by                LessFunc
 }
 
 func (by LessFunc) Sort(bankNoteSolutions []BankNoteSolution) {
@@ -75,7 +77,7 @@ func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bank
 	// but they are assignable to each other
 	// We define the method Sort on the namedType, so lessFunc must be LessFunc
 	// otherwise it would be an unnamed type and will not be able to find its named type method *Sort*
-	var lessFunc LessFunc 
+	var lessFunc LessFunc
 	lessFunc = func(s1, s2 *BankNoteSolution) bool {
 		// The less the better
 		result1, err1 := evalFunc(bankNoteProblem, s1)
@@ -105,11 +107,11 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 	intensityFunc := func(generationCount, maxGenerationCount int) float64 {
 		return 1.0
 		/*
-		intensity := 1.0 - float64(generationCount) / float64(maxGenerationCount)
-		if intensity < 0.1 {
-			intensity = 0.1
-		}
-		return intensity
+			intensity := 1.0 - float64(generationCount) / float64(maxGenerationCount)
+			if intensity < 0.1 {
+				intensity = 0.1
+			}
+			return intensity
 		*/
 	}
 	maxMutateCount := 10
@@ -117,17 +119,16 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 	mutate := mutateFuncGenerator(maxMutateCount, maxAttemptCount)
 	// </Parameters>
 
-
 	candidateSolutionPool := make([]BankNoteSolution, 1)
 	candidateSolutionPool[0] = initialSolution
-	for generationCount := 0 ;; generationCount++ {
+	for generationCount := 0; ; generationCount++ {
 		noOfCandidates := len(candidateSolutionPool)
 		intensity := intensityFunc(generationCount, maxGenerationCount)
 
 		// Populate the offspring slice
-		offspringSolutionPool := make([]BankNoteSolution, noOfCandidates, noOfCandidates * (noOfMutantForEachCandidate + 1))
+		offspringSolutionPool := make([]BankNoteSolution, noOfCandidates, noOfCandidates*(noOfMutantForEachCandidate+1))
 		copy(offspringSolutionPool, candidateSolutionPool)
-		
+
 		// Reduce duplicates
 		hashCodeMap := make(map[string]bool, 0)
 		for i := 0; i < noOfCandidates; i++ {
@@ -158,13 +159,13 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 		}
 
 		sortBankNoteSolutionByEvaluationFunc(bnp, offspringSolutionPool, (*BankNoteProblem).evaluate)
-		
+
 		score, _ := bnp.evaluate(&offspringSolutionPool[0])
 		fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
 		if generationCount >= maxGenerationCount || score == 0 {
 			return offspringSolutionPool[0], nil
 		}
-		
+
 		// Grab the best of them for next round
 		nextGenerationCandidateCount := maxCandidateCount
 		length := len(offspringSolutionPool)
@@ -173,7 +174,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 		}
 
 		candidateSolutionPool = make([]BankNoteSolution, nextGenerationCandidateCount)
-		copy(candidateSolutionPool, offspringSolutionPool[0 : nextGenerationCandidateCount])
+		copy(candidateSolutionPool, offspringSolutionPool[0:nextGenerationCandidateCount])
 	}
 	// Not gonna happen
 	return BankNoteSolution{}, errors.New("unknown error")

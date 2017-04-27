@@ -2,11 +2,11 @@ package main
 
 type BankNoteDeck struct {
 	faceValue float64
-	quantity int
+	quantity  int
 }
 
 type BankNoteProblem struct {
-	robberShare []int
+	robberShare   []int
 	bankNoteDecks []BankNoteDeck
 }
 

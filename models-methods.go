@@ -1,9 +1,10 @@
 package main
 
-import ("math"
-	"math/rand"
+import (
 	"errors"
 	"fmt"
+	"math"
+	"math/rand"
 )
 
 // BankNoteProblem methods
@@ -39,8 +40,8 @@ func (bns *BankNoteSolution) clone() BankNoteSolution {
 func (bns *BankNoteSolution) hashCode() int64 {
 	return 0
 }
-func mutateFuncGenerator(maxMutateCount, maxAttemptCount int) (func(*BankNoteSolution, float64) error) {
-	return func (bns *BankNoteSolution, intensity float64) error {
+func mutateFuncGenerator(maxMutateCount, maxAttemptCount int) func(*BankNoteSolution, float64) error {
+	return func(bns *BankNoteSolution, intensity float64) error {
 		// Edge cases
 		noOfRobbers := len(bns.robberAccounts)
 		if noOfRobbers < 2 {
@@ -58,45 +59,45 @@ func mutateFuncGenerator(maxMutateCount, maxAttemptCount int) (func(*BankNoteSol
 
 		for mutateCount, attemptCount := 0, 0; mutateCount < maxMutateCount && attemptCount < maxAttemptCount; attemptCount++ {
 			// Pick two random robbers and a random deck
-	 		selectedRobber1 := rand.Intn(noOfRobbers)
-	 		selectedRobber2 := selectedRobber1
-	 		for ;selectedRobber2 == selectedRobber1; {
-	 			selectedRobber2 = rand.Intn(noOfRobbers)
-	 		}
+			selectedRobber1 := rand.Intn(noOfRobbers)
+			selectedRobber2 := selectedRobber1
+			for selectedRobber2 == selectedRobber1 {
+				selectedRobber2 = rand.Intn(noOfRobbers)
+			}
 
-	 		selectedBankNoteDeck1 := rand.Intn(noOfBankNoteDecks)
-	 		selectedBankNoteDeck2 := rand.Intn(noOfBankNoteDecks)
-	 		for ;selectedBankNoteDeck2 == selectedBankNoteDeck1; {
-	 			selectedBankNoteDeck2 = rand.Intn(noOfBankNoteDecks)
-	 		}
+			selectedBankNoteDeck1 := rand.Intn(noOfBankNoteDecks)
+			selectedBankNoteDeck2 := rand.Intn(noOfBankNoteDecks)
+			for selectedBankNoteDeck2 == selectedBankNoteDeck1 {
+				selectedBankNoteDeck2 = rand.Intn(noOfBankNoteDecks)
+			}
 
-	 		remaining1 := bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck1].quantity
-	 		remaining2 := bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck2].quantity
-	 		remaining := remaining1
-	 		if remaining2 < remaining {
-	 			remaining = remaining2
-	 		}
-	 		if remaining <= 0 {
-	 			continue
-	 		}
+			remaining1 := bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck1].quantity
+			remaining2 := bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck2].quantity
+			remaining := remaining1
+			if remaining2 < remaining {
+				remaining = remaining2
+			}
+			if remaining <= 0 {
+				continue
+			}
 
-	 		// Move at least 1 from Robber1 account to Robber2 account
-	 		moveQuantity := 1
-	 		intnParameter := int(math.Floor(float64(remaining) * intensity))
-	 		if intnParameter == 0 {
-	 			moveQuantity = 1
+			// Move at least 1 from Robber1 account to Robber2 account
+			moveQuantity := 1
+			intnParameter := int(math.Floor(float64(remaining) * intensity))
+			if intnParameter == 0 {
+				moveQuantity = 1
 			} else {
 				moveQuantity = rand.Intn(moveQuantity)
-		 		if moveQuantity < 1 {
-		 			moveQuantity = 1
+				if moveQuantity < 1 {
+					moveQuantity = 1
 				}
 			}
 
-	 		bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck1].quantity -= moveQuantity
-	 		bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck1].quantity += moveQuantity
-	 		bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck2].quantity -= moveQuantity
-	 		bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck2].quantity += moveQuantity
-	 		mutateCount++
+			bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck1].quantity -= moveQuantity
+			bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck1].quantity += moveQuantity
+			bns.robberAccounts[selectedRobber2].bankNoteDecks[selectedBankNoteDeck2].quantity -= moveQuantity
+			bns.robberAccounts[selectedRobber1].bankNoteDecks[selectedBankNoteDeck2].quantity += moveQuantity
+			mutateCount++
 		}
 		return nil
 	}
