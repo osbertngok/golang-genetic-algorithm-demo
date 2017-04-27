@@ -188,7 +188,9 @@ func Test_Mutate(t *testing.T) {
 	bnp := TESTSBNP[0]
 	bns := bnp.getDefaultSolution()
 	newBns := bns.clone()
-	newBns.mutate(1.0)
+	maxMutateCount := 10
+	maxAttemptCount := 100
+	mutateFuncGenerator(maxMutateCount, maxAttemptCount)(&newBns, 1.0)
 	err := newBns.validate(&bnp)
 	if err != nil {
 		t.Log(err)

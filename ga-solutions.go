@@ -1,9 +1,11 @@
 package main
 
-import "math"
-import "errors"
-import "sort"
-import "fmt"
+import ("math"
+	"errors"
+	"sort"
+	"fmt"
+	"math/rand"
+	"time")
 
 func averageFaceValue(bankNoteDecks *[]BankNoteDeck) (float64, error) {
 	sumOfCashValue := 0.0
@@ -93,12 +95,13 @@ func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bank
 }
 
 func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, error) {
+	rand.Seed(time.Now().UnixNano())
 	initialSolution := bnp.getDefaultSolution()
 
 	// <Parameters>
-	maxGenerationCount := 10
-	maxCandidateCount := 100
-	noOfMutantForEachCandidate := 1000
+	maxGenerationCount := 100
+	maxCandidateCount := 200
+	noOfMutantForEachCandidate := 200
 	intensityFunc := func(generationCount, maxGenerationCount int) float64 {
 		return 1.0
 		/*
@@ -109,6 +112,9 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 		return intensity
 		*/
 	}
+	maxMutateCount := 10
+	maxAttemptCount := 100
+	mutate := mutateFuncGenerator(maxMutateCount, maxAttemptCount)
 	// </Parameters>
 
 
@@ -136,7 +142,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 			for j := 0; j < noOfMutantForEachCandidate; j++ {
 				mutant := candidateSolutionPool[i].clone()
 
-				err := mutant.mutate(intensity)
+				err := mutate(&mutant, intensity)
 				if err != nil {
 					return BankNoteSolution{}, err
 				}
@@ -155,7 +161,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 		
 		score, _ := bnp.evaluate(&offspringSolutionPool[0])
 		fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
-		if generationCount >= maxGenerationCount {
+		if generationCount >= maxGenerationCount || score == 0 {
 			return offspringSolutionPool[0], nil
 		}
 		
