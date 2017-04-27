@@ -110,9 +110,9 @@ func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bank
 
 func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 	initialSolution := bnp.getDefaultSolution()
-	maxGenerationCount := 100
-	maxCandidateCount := 100
-	noOfMutantForEachCandidate := 10
+	maxGenerationCount := 1
+	maxCandidateCount := 10
+	noOfMutantForEachCandidate := 5
 	candidateSolutionPool := make([]*BankNoteSolution, 1)
 	candidateSolutionPool[0] = &initialSolution
 	for generationCount := 0 ;; generationCount++ {
@@ -137,19 +137,8 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 		for i := 0; i < noOfCandidates; i++ {
 			for j := 0; j < noOfMutantForEachCandidate; j++ {
 				mutant := candidateSolutionPool[i].clone()
-				// Debug
-				fmt.Println("cloning")
-				err := mutant.validate(bnp)
-				if err != nil {
-					panic(err)
-				}
 
-				fmt.Println("mutating")
 				mutant.mutate()
-				err = mutant.validate(bnp)
-				if err != nil {
-					panic(err)
-				}
 
 				hashCode := fmt.Sprint(mutant)
 				if _, ok := hashCodeMap[hashCode]; ok {
@@ -162,7 +151,17 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
 		}
 
 		// Sort by evalFunc
+		for _, element := range offspringSolutionPool {
+			fmt.Println(*element)
+		}
+		fmt.Println("")
 		sortBankNoteSolutionByEvaluationFunc(bnp, offspringSolutionPool, (*BankNoteProblem).evaluate)
+		for _, element := range offspringSolutionPool {
+			fmt.Println(*element)
+		}
+		fmt.Println("")
+		score, _ := bnp.evaluate(offspringSolutionPool[0])
+		fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
 		if generationCount >= maxGenerationCount {
 			return *offspringSolutionPool[0]
 		}

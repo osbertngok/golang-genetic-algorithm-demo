@@ -1,10 +1,10 @@
 package main
 
 import (
-	"testing"
+	"fmt"
 )
 
-func validateBnsEqual(t *testing.T, bnp *BankNoteProblem, bns1 *BankNoteSolution, bns2 *BankNoteSolution) {
+func validateBnsEqual(bnp *BankNoteProblem, bns1 *BankNoteSolution, bns2 *BankNoteSolution) error {
 	for i := 0; i < len(bns1.robberAccounts); i++ {
 		robberAccount1 := bns1.robberAccounts[i]
 		robberAccount2 := bns2.robberAccounts[i]
@@ -12,14 +12,13 @@ func validateBnsEqual(t *testing.T, bnp *BankNoteProblem, bns1 *BankNoteSolution
 			bankNoteDeck1 := robberAccount1.bankNoteDecks[j]
 			bankNoteDeck2 := robberAccount2.bankNoteDecks[j]
 			if (bankNoteDeck1.faceValue != bankNoteDeck2.faceValue) {
-				t.Logf("face value mismatched, %d:%d - %f, %f", i, j, bankNoteDeck1.faceValue, bankNoteDeck2.faceValue)
-				t.Fail()
+				fmt.Errorf("face value mismatched, %d:%d - %f, %f", i, j, bankNoteDeck1.faceValue, bankNoteDeck2.faceValue)
 			}
 
 			if (bankNoteDeck1.quantity != bankNoteDeck2.quantity) {
-				t.Logf("quantity mismatched, %d:%d - %d, %d", i, j, bankNoteDeck1.quantity, bankNoteDeck2.quantity)
-				t.Fail()
+				fmt.Errorf("quantity mismatched, %d:%d - %d, %d", i, j, bankNoteDeck1.quantity, bankNoteDeck2.quantity)
 			}
 		}
 	}
+	return nil
 }

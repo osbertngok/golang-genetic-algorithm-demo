@@ -29,9 +29,10 @@ func (bnp *BankNoteProblem) validate() error {
 
 func (bns *BankNoteSolution) clone() BankNoteSolution {
 	robberAccounts := make([]RobberAccount, len(bns.robberAccounts))
-	for _, robberAccount := range bns.robberAccounts {
+	for index, robberAccount := range bns.robberAccounts {
 		bankNoteDecks := make([]BankNoteDeck, len(robberAccount.bankNoteDecks))
 		copy(bankNoteDecks, robberAccount.bankNoteDecks)
+		robberAccounts[index].bankNoteDecks = bankNoteDecks
 	}
 	return BankNoteSolution{robberAccounts}
 }
