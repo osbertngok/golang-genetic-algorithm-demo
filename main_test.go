@@ -131,5 +131,10 @@ func Test_DefaultSolution_1(t *testing.T) {
 func Test_GASolution_1(t *testing.T) {
 	bnp := TESTSBNP[0]
 	bns := bnp.getGeneticAlgorithmSolution()
+	err := bns.validate(&bnp)
+	if err != nil {
+		t.Log(err)
+		t.Fatal()
+	}
 	validateBnsEqual(t, &bnp, &bns, &TESTSBNS[0])
 }

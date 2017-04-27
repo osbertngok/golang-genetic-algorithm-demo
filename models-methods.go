@@ -35,6 +35,10 @@ func (bns *BankNoteSolution) clone() BankNoteSolution {
 	return BankNoteSolution{robberAccounts}
 }
 
+func (bns *BankNoteSolution) hashCode() int64 {
+	return 0
+}
+
 func (bns *BankNoteSolution) mutate() {
 	rand.Seed(time.Now().UnixNano())
 	maxMutateCount := 10

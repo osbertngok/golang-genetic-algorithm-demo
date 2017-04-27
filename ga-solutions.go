@@ -3,6 +3,7 @@ package main
 import "math"
 import "errors"
 import "sort"
+import "fmt"
 
 func averageFaceValue(bankNoteDecks *[]BankNoteDeck) (float64, error) {
 	sumOfCashValue := 0.0
@@ -108,6 +109,58 @@ func sortBankNoteSolutionByEvaluationFunc(bankNoteProblem *BankNoteProblem, bank
 }
 
 func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() BankNoteSolution {
-	solution := bnp.getDefaultSolution()
-	return solution
+	initialSolution := bnp.getDefaultSolution()
+	maxGenerationCount := 100
+	maxCandidateCount := 100
+	noOfMutantForEachCandidate := 10
+	candidateSolutionPool := make([]*BankNoteSolution, 1)
+	candidateSolutionPool[0] = &initialSolution
+	for generationCount := 0 ;; generationCount++ {
+		noOfCandidates := len(candidateSolutionPool)
+
+		// Populate the offspring slice
+		offspringSolutionPool := make([]*BankNoteSolution, noOfCandidates, noOfCandidates * (noOfMutantForEachCandidate + 1))
+		copy(offspringSolutionPool, candidateSolutionPool)
+		
+		// Reduce duplicates
+		hashCodeMap := make(map[string]bool, 0)
+		for i := 0; i < noOfCandidates; i++ {
+			hashCode := fmt.Sprint(offspringSolutionPool[i])
+			if _, ok := hashCodeMap[hashCode]; ok {
+				// already exists, next; NOT EXPECTED TO BE RUN
+				continue
+			}
+			hashCodeMap[hashCode] = true
+		}
+		for i := 0; i < noOfCandidates; i++ {
+			for j := 0; j < noOfMutantForEachCandidate; j++ {
+				mutant := candidateSolutionPool[i].clone()
+				mutant.mutate()
+				hashCode := fmt.Sprint(mutant)
+				if _, ok := hashCodeMap[hashCode]; ok {
+					// already exists, next;
+					continue
+				}
+				hashCodeMap[hashCode] = true
+				offspringSolutionPool = append(offspringSolutionPool, &mutant)
+			}
+		}
+
+		// Sort by evalFunc
+		sortBankNoteSolutionByEvaluationFunc(bnp, offspringSolutionPool, (*BankNoteProblem).evaluate)
+		if generationCount >= maxGenerationCount {
+			return *offspringSolutionPool[0]
+		}
+		
+		// Grab the best of them for next round
+		nextGenerationCandidateCount := maxCandidateCount
+		if length := len(offspringSolutionPool); length < maxCandidateCount {
+			nextGenerationCandidateCount = length
+		}
+
+		candidateSolutionPool := make([]*BankNoteSolution, nextGenerationCandidateCount)
+		copy(candidateSolutionPool, offspringSolutionPool[0 : nextGenerationCandidateCount - 1])
+	}
+	// Not gonna happen
+	return BankNoteSolution{}
 }
