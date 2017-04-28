@@ -122,8 +122,7 @@ func Test_validateBankNoteProblem_success(t *testing.T) {
 		{20, 20},
 		{50, 5},
 		{100, 10}}
-	err := bnp.validate()
-	if err != nil {
+	if err := bnp.validate(); err != nil {
 		t.Log("error but not expected!")
 		t.Fail()
 	} else {
@@ -146,8 +145,7 @@ func Test_validateBankNoteProblem_failed(t *testing.T) {
 		{50, 5},
 		{100, 10}}
 	bnp.bankNoteDecks = bankNoteDecksArray[:]
-	err := bnp.validate()
-	if err != nil {
+	if err := bnp.validate(); err != nil {
 		t.Log("Good!")
 	} else {
 		t.Log("Expected to be error!")
@@ -187,8 +185,7 @@ func Test_DefaultSolution_1(t *testing.T) {
 		t.Fail()
 	}
 
-	err := bns.validate(&bnp)
-	if err != nil {
+	if err := bns.validate(&bnp); err != nil {
 		t.Log(err)
 		t.Fail()
 	}
@@ -202,8 +199,7 @@ func Test_GASolution_1(t *testing.T) {
 		t.Fatal()
 	}
 
-	err = bns.validate(&bnp)
-	if err != nil {
+	if err = bns.validate(&bnp); err != nil {
 		t.Log(err)
 		t.Fatal()
 	}
@@ -220,8 +216,7 @@ func Test_Mutate(t *testing.T) {
 	maxMutateCount := 10
 	maxAttemptCount := 100
 	mutateFuncGenerator(maxMutateCount, maxAttemptCount)(&newBns, 1.0)
-	err := newBns.validate(&bnp)
-	if err != nil {
+	if err := newBns.validate(&bnp); err != nil {
 		t.Log(err)
 		t.Fatal()
 	}

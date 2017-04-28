@@ -148,8 +148,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution() (BankNoteSolution, err
 			for j := 0; j < noOfMutantForEachCandidate; j++ {
 				mutant := candidateSolutionPool[i].clone()
 
-				err := mutate(&mutant, intensity)
-				if err != nil {
+				if err := mutate(&mutant, intensity); err != nil {
 					return BankNoteSolution{}, err
 				}
 
