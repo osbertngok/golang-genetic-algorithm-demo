@@ -53,6 +53,14 @@ func populateOffspringSolutionPool(candidateSolutionPool *[]BankNoteSolution, co
 	return offspringSolutionPool, nil
 }
 
+func getAndPrintScore(bnp *BankNoteProblem, offspringSolutionPool *[]BankNoteSolution, generationCount int) float64 {
+	// <for-information-only>
+	score, _ := bnp.evaluate(&(*offspringSolutionPool)[0])
+	fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
+	// </for-information-only>
+	return score
+}
+
 func (bnp *BankNoteProblem) getGeneticAlgorithmSolution(config GeneticAlgorithmConfig) (BankNoteSolution, error) {
 	rand.Seed(time.Now().UnixNano())
 	initialSolution := bnp.getDefaultSolution()
@@ -65,9 +73,7 @@ func (bnp *BankNoteProblem) getGeneticAlgorithmSolution(config GeneticAlgorithmC
 
 		sortBankNoteSolutionByEvaluationFunc(bnp, offspringSolutionPool, (*BankNoteProblem).evaluate)
 
-		score, _ := bnp.evaluate(&offspringSolutionPool[0])
-		fmt.Printf("Generation: %d, Score: %f\n", generationCount, score)
-		if generationCount >= config.maxGenerationCount || score == 0 {
+		if score := getAndPrintScore(bnp, &offspringSolutionPool, generationCount); generationCount >= config.maxGenerationCount || score == 0 {
 			return offspringSolutionPool[0], nil
 		}
 
