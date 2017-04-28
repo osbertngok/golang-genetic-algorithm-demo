@@ -37,9 +37,6 @@ func (bns *BankNoteSolution) clone() BankNoteSolution {
 	return BankNoteSolution{robberAccounts}
 }
 
-func (bns *BankNoteSolution) hashCode() int64 {
-	return 0
-}
 func mutateFuncGenerator(maxMutateCount, maxAttemptCount int) func(*BankNoteSolution, float64) error {
 	return func(bns *BankNoteSolution, intensity float64) error {
 		// Edge cases

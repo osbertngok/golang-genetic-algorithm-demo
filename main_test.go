@@ -193,7 +193,23 @@ func Test_DefaultSolution_1(t *testing.T) {
 
 func Test_GASolution_1(t *testing.T) {
 	bnp := TESTSBNP[2]
-	bns, err := bnp.getGeneticAlgorithmSolution()
+	config := GeneticAlgorithmConfig{
+		maxGenerationCount:         20,
+		maxCandidateCount:          200,
+		noOfMutantForEachCandidate: 200,
+		maxMutateCount:             10,
+		maxAttemptCount:            100,
+		intensityFunc: func(generationCount, maxGenerationCount int) float64 {
+			return 1.0
+			/*
+				intensity := 1.0 - float64(generationCount) / float64(maxGenerationCount)
+				if intensity < 0.1 {
+					intensity = 0.1
+				}
+				return intensity
+			*/
+		}}
+	bns, err := bnp.getGeneticAlgorithmSolution(config)
 	if err != nil {
 		t.Log(err)
 		t.Fatal()
