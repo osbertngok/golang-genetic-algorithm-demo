@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"math"
 	"sort"
 )
 
@@ -29,7 +28,8 @@ func (bnp *BankNoteProblem) evaluate(bns *BankNoteSolution) (float64, error) {
 		if err != nil {
 			continue
 		}
-		sumOfAverageFaceValueDifferenceSquare += math.Pow(averageFaceValue-totalAverageFaceValue, 2.0)
+		diff := averageFaceValue - totalAverageFaceValue
+		sumOfAverageFaceValueDifferenceSquare += diff * diff // faster than math.pow
 		count++
 	}
 

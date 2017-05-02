@@ -28,19 +28,16 @@ func Test_validateBankNoteProblem_success(t *testing.T) {
 
 func Test_validateBankNoteProblem_failed(t *testing.T) {
 	var bnp BankNoteProblem
-	robberShareArray := [...]int{
-		10,
+	bnp.robberShare = []int{10,
 		20,
 		31}
-	bnp.robberShare = robberShareArray[:]
-	bankNoteDecksArray := [...]BankNoteDeck{
+	bnp.bankNoteDecks = []BankNoteDeck{
 		{1, 5},
 		{5, 10},
 		{10, 10},
 		{20, 20},
 		{50, 5},
 		{100, 10}}
-	bnp.bankNoteDecks = bankNoteDecksArray[:]
 	if err := bnp.validate(); err != nil {
 		t.Log("Good!")
 	} else {
