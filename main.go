@@ -63,6 +63,8 @@ func profileWrapper(func1 func()) {
 		pprof.StartCPUProfile(f)
 		func1()
 		defer pprof.StopCPUProfile()
+	} else {
+		func1()
 	}
 }
 
