@@ -1,10 +1,12 @@
 package main
 
+import "os"
+
 func main() {
 	var bnp BankNoteProblem
-	// input
-	readRobberShare(&bnp)
-	readBankNoteDecks(&bnp)
+	input := os.Stdin
+	readRobberShare(input, &bnp)
+	readBankNoteDecks(input, &bnp)
 	_ = bnp.validate()
 	// output
 }
