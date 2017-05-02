@@ -1,11 +1,14 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
 	"os"
+	"runtime/pprof"
 )
 
-func main() {
+func subMain() {
 	var bnp BankNoteProblem
 	input, err := os.Open("./data/bnp1.txt")
 	if err != nil {
@@ -46,4 +49,23 @@ func main() {
 		fmt.Print(err)
 		os.Exit(-1)
 	}
+}
+
+func profileWrapper(func1 func()) {
+
+	var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+	flag.Parse()
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		func1()
+		defer pprof.StopCPUProfile()
+	}
+}
+
+func main() {
+	profileWrapper(subMain)
 }
