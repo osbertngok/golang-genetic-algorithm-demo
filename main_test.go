@@ -74,7 +74,7 @@ func Test_DefaultSolution_1(t *testing.T) {
 				{20, 15},
 				{50, 5},
 				{100, 10}}}}}
-	if fmt.Sprint(bns) != fmt.Sprint(expectedBns) {
+	if bns.String() != expectedBns.String() {
 		t.Fail()
 	}
 
@@ -88,7 +88,7 @@ func Test_Clone(t *testing.T) {
 	bnp := testsbnp[0]
 	bns := bnp.getDefaultSolution()
 	newBns := bns.clone()
-	if fmt.Sprint(bns) != fmt.Sprint(newBns) {
+	if bns.String() != newBns.String() {
 		t.Log("bns not equal")
 		t.Fail()
 	}
@@ -106,7 +106,7 @@ func Test_Mutate(t *testing.T) {
 		t.Fatal()
 	}
 
-	if fmt.Sprint(bns) == fmt.Sprint(newBns) {
+	if bns.String() == newBns.String() {
 		t.Log("not expected to be equal")
 		t.Fail()
 	}
@@ -141,7 +141,7 @@ func Test_GASolution_1(t *testing.T) {
 		t.Fatal()
 	}
 	fmt.Println(bns)
-	if fmt.Sprint(bns) != fmt.Sprint(testsbns[2]) {
+	if bns.String() != testsbns[2].String() {
 		t.Fail()
 	}
 }

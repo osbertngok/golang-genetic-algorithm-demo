@@ -45,7 +45,7 @@ func subMain() {
 		os.Exit(-1)
 	}
 	fmt.Println(bns)
-	if fmt.Sprint(bns) != fmt.Sprint(testsbns[2]) {
+	if bns.String() != testsbns[2].String() {
 		fmt.Print(err)
 		os.Exit(-1)
 	}

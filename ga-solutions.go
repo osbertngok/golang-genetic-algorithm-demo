@@ -26,7 +26,7 @@ func populateOffspringSolutionPool(candidateSolutionPool *[]BankNoteSolution, co
 	// Reduce duplicates
 	hashCodeMap := make(map[string]bool, 0)
 	for i := 0; i < noOfCandidates; i++ {
-		hashCode := fmt.Sprint((offspringSolutionPool)[i])
+		hashCode := offspringSolutionPool[i].String()
 		if _, ok := hashCodeMap[hashCode]; ok {
 			// already exists, next; NOT EXPECTED TO BE RUN
 			continue
@@ -41,7 +41,7 @@ func populateOffspringSolutionPool(candidateSolutionPool *[]BankNoteSolution, co
 				return nil, err
 			}
 
-			hashCode := fmt.Sprint(mutant)
+			hashCode := mutant.String()
 			if _, ok := hashCodeMap[hashCode]; ok {
 				// already exists, next;
 				continue

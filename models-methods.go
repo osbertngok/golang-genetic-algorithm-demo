@@ -209,15 +209,15 @@ func (bns *BankNoteSolution) validate(bnp *BankNoteProblem) error {
 	noOfBankNoteDecksInBnp := len(bnp.bankNoteDecks)
 
 	if len(bns.robberAccounts) != noOfRobbersInBnp {
-		bnpstr := fmt.Sprint(*bnp)
-		bnsstr := fmt.Sprint(*bns)
+		bnpstr := bnp.String()
+		bnsstr := bns.String()
 		return fmt.Errorf("robber count mismatch, bnp: %d, bns: %d, p: %s, s: %s", noOfRobbersInBnp, len(bns.robberAccounts), bnpstr, bnsstr)
 	}
 
 	for index, element := range bns.robberAccounts {
 		if len(element.bankNoteDecks) != noOfBankNoteDecksInBnp {
-			bnpstr := fmt.Sprint(*bnp)
-			bnsstr := fmt.Sprint(*bns)
+			bnpstr := bnp.String()
+			bnsstr := bns.String()
 			return fmt.Errorf("banknotedeck count mismatch, index: %d, bnp: %d, bns: %d, p: %s, s: %s", index, noOfBankNoteDecksInBnp, len(element.bankNoteDecks), bnpstr, bnsstr)
 		}
 	}
@@ -235,8 +235,8 @@ func (bns *BankNoteSolution) validate(bnp *BankNoteProblem) error {
 			quantity += bnd.quantity
 		}
 		if quantity != bnp.robberShare[i] {
-			bnpstr := fmt.Sprint(*bnp)
-			bnsstr := fmt.Sprint(*bns)
+			bnpstr := bnp.String()
+			bnsstr := bns.String()
 			return fmt.Errorf("robber share mismatch, index: %d, bnp: %d, bns: %d, p: %s, s: %s", i, bnp.robberShare[i], quantity, bnpstr, bnsstr)
 		}
 	}

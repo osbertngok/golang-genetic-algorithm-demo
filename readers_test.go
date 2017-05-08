@@ -27,7 +27,7 @@ func Test_bnp_reader(t *testing.T) {
 		t.Fail()
 	}
 
-	if fmt.Sprint(bnp) != fmt.Sprint(testsbnp[0]) {
+	if bnp.String() != testsbnp[0].String() {
 		fmt.Println(bnp)
 		fmt.Println(testsbnp[0])
 		t.Log("bnp not equal")
