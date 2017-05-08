@@ -16,7 +16,7 @@ var testsbnp = [3]BankNoteProblem{
 			10,
 			20,
 			30},
-		[]BankNoteDeck{
+		[]*BankNoteDeck{
 			{1, 5},
 			{5, 10},
 			{10, 10},
@@ -29,7 +29,7 @@ var testsbnp = [3]BankNoteProblem{
 			20,
 			30,
 			40},
-		[]BankNoteDeck{
+		[]*BankNoteDeck{
 			{1, 20},
 			{72, 50},
 			{100, 30}}},
@@ -39,16 +39,16 @@ var testsbnp = [3]BankNoteProblem{
 			15,
 			18,
 			20},
-		[]BankNoteDeck{
+		[]*BankNoteDeck{
 			{2.56, 20},
 			{3.72, 20},
 			{4.55, 26}}}}
 
 var testsbns = [3]BankNoteSolution{
 
-	{[]RobberAccount{
+	{[]*RobberAccount{
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 1},
 				{5, 0},
 				{10, 5},
@@ -56,7 +56,7 @@ var testsbns = [3]BankNoteSolution{
 				{50, 3},
 				{100, 1}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 2},
 				{5, 8},
 				{10, 4},
@@ -64,52 +64,52 @@ var testsbns = [3]BankNoteSolution{
 				{50, 0},
 				{100, 5}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 2},
 				{5, 2},
 				{10, 1},
 				{20, 19},
 				{50, 2},
 				{100, 4}}}}},
-	{[]RobberAccount{
+	{[]*RobberAccount{
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 2},
 				{72, 5},
 				{100, 3}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 4},
 				{72, 10},
 				{100, 6}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 6},
 				{72, 15},
 				{100, 9}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 8},
 				{72, 20},
 				{100, 12}}}}},
-	{[]RobberAccount{
+	{[]*RobberAccount{
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{2.56, 1},
 				{3.72, 11},
 				{4.55, 1}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{2.56, 6},
 				{3.72, 1},
 				{4.55, 8}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{2.56, 6},
 				{3.72, 4},
 				{4.55, 8}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{2.56, 7},
 				{3.72, 4},
 				{4.55, 9}}}}}}

@@ -11,7 +11,7 @@ func Test_validateBankNoteProblem_success(t *testing.T) {
 		10,
 		20,
 		30}
-	bnp.bankNoteDecks = []BankNoteDeck{
+	bnp.bankNoteDecks = []*BankNoteDeck{
 		{1, 5},
 		{5, 10},
 		{10, 10},
@@ -31,7 +31,7 @@ func Test_validateBankNoteProblem_failed(t *testing.T) {
 	bnp.robberShare = []int{10,
 		20,
 		31}
-	bnp.bankNoteDecks = []BankNoteDeck{
+	bnp.bankNoteDecks = []*BankNoteDeck{
 		{1, 5},
 		{5, 10},
 		{10, 10},
@@ -49,9 +49,9 @@ func Test_validateBankNoteProblem_failed(t *testing.T) {
 func Test_DefaultSolution_1(t *testing.T) {
 	bnp := testsbnp[0]
 	bns := bnp.getDefaultSolution()
-	expectedBns := BankNoteSolution{[]RobberAccount{
+	expectedBns := BankNoteSolution{[]*RobberAccount{
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 5},
 				{5, 5},
 				{10, 0},
@@ -59,7 +59,7 @@ func Test_DefaultSolution_1(t *testing.T) {
 				{50, 0},
 				{100, 0}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 0},
 				{5, 5},
 				{10, 10},
@@ -67,7 +67,7 @@ func Test_DefaultSolution_1(t *testing.T) {
 				{50, 0},
 				{100, 0}}},
 		{
-			[]BankNoteDeck{
+			[]*BankNoteDeck{
 				{1, 0},
 				{5, 0},
 				{10, 0},
@@ -80,6 +80,34 @@ func Test_DefaultSolution_1(t *testing.T) {
 
 	if err := bns.validate(&bnp); err != nil {
 		t.Log(err)
+		t.Fail()
+	}
+}
+
+func Test_Clone(t *testing.T) {
+	bnp := testsbnp[0]
+	bns := bnp.getDefaultSolution()
+	newBns := bns.clone()
+	if fmt.Sprint(bns) != fmt.Sprint(newBns) {
+		t.Log("bns not equal")
+		t.Fail()
+	}
+}
+
+func Test_Mutate(t *testing.T) {
+	bnp := testsbnp[0]
+	bns := bnp.getDefaultSolution()
+	newBns := bns.clone()
+	maxMutateCount := 10
+	maxAttemptCount := 100
+	mutateFuncGenerator(maxMutateCount, maxAttemptCount)(&newBns, 1.0)
+	if err := newBns.validate(&bnp); err != nil {
+		t.Log(err)
+		t.Fatal()
+	}
+
+	if fmt.Sprint(bns) == fmt.Sprint(newBns) {
+		t.Log("not expected to be equal")
 		t.Fail()
 	}
 }
@@ -114,34 +142,6 @@ func Test_GASolution_1(t *testing.T) {
 	}
 	fmt.Println(bns)
 	if fmt.Sprint(bns) != fmt.Sprint(testsbns[2]) {
-		t.Fail()
-	}
-}
-
-func Test_Mutate(t *testing.T) {
-	bnp := testsbnp[0]
-	bns := bnp.getDefaultSolution()
-	newBns := bns.clone()
-	maxMutateCount := 10
-	maxAttemptCount := 100
-	mutateFuncGenerator(maxMutateCount, maxAttemptCount)(&newBns, 1.0)
-	if err := newBns.validate(&bnp); err != nil {
-		t.Log(err)
-		t.Fatal()
-	}
-
-	if fmt.Sprint(bns) == fmt.Sprint(newBns) {
-		t.Log("not expected to be equal")
-		t.Fail()
-	}
-}
-
-func Test_Clone(t *testing.T) {
-	bnp := testsbnp[0]
-	bns := bnp.getDefaultSolution()
-	newBns := bns.clone()
-	if fmt.Sprint(bns) != fmt.Sprint(newBns) {
-		t.Log("bns not equal")
 		t.Fail()
 	}
 }

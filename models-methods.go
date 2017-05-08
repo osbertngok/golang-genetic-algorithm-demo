@@ -1,13 +1,62 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"math"
 	"math/rand"
 )
 
+// BankNoteDeck methods
+
+func (bnd *BankNoteDeck) clone() BankNoteDeck {
+	return BankNoteDeck{bnd.faceValue, bnd.quantity}
+}
+
+func (bnd BankNoteDeck) String() string {
+	var buffer bytes.Buffer
+	buffer.WriteString("{")
+	buffer.WriteString(fmt.Sprintf("%f", bnd.faceValue))
+	buffer.WriteString(", ")
+	buffer.WriteString(fmt.Sprintf("%d", bnd.quantity))
+	buffer.WriteString("}")
+	return buffer.String()
+}
+
 // BankNoteProblem methods
+
+func (bnp BankNoteProblem) String() string {
+	var buffer bytes.Buffer
+	buffer.WriteString("{")
+	if bnp.robberShare != nil {
+		buffer.WriteString("[")
+		buffer.WriteString("]")
+	} else {
+		buffer.WriteString("nil")
+	}
+	buffer.WriteString(", ")
+	if bnp.bankNoteDecks != nil {
+		buffer.WriteString("[")
+		bndCount := len(bnp.bankNoteDecks)
+		for index, item := range bnp.bankNoteDecks {
+			if item != nil {
+				buffer.WriteString(item.String())
+			} else {
+				buffer.WriteString("nil")
+			}
+			if index < bndCount-1 {
+				buffer.WriteString(", ")
+			}
+		}
+		buffer.WriteString("]")
+	} else {
+		buffer.WriteString("nil")
+	}
+	buffer.WriteString("}")
+	return buffer.String()
+}
+
 func (bnp *BankNoteProblem) validate() error {
 	sumOfRobberShare := 0
 	for _, element := range bnp.robberShare {
@@ -25,16 +74,70 @@ func (bnp *BankNoteProblem) validate() error {
 	return nil
 }
 
+// RobberAccount methods
+
+func (ra RobberAccount) String() string {
+	var buffer bytes.Buffer
+	buffer.WriteString("{")
+	if ra.bankNoteDecks != nil {
+		buffer.WriteString("[")
+		bndCount := len(ra.bankNoteDecks)
+		for index, item := range ra.bankNoteDecks {
+			if item != nil {
+				buffer.WriteString(item.String())
+			} else {
+				buffer.WriteString("nil")
+			}
+			if index < bndCount-1 {
+				buffer.WriteString(", ")
+			}
+		}
+		buffer.WriteString("]")
+	} else {
+		buffer.WriteString("nil")
+	}
+	buffer.WriteString("}")
+	return buffer.String()
+}
+
 // BankNoteSolution methods
 
 func (bns *BankNoteSolution) clone() BankNoteSolution {
-	robberAccounts := make([]RobberAccount, len(bns.robberAccounts))
+	robberAccounts := make([]*RobberAccount, len(bns.robberAccounts))
 	for index, robberAccount := range bns.robberAccounts {
-		bankNoteDecks := make([]BankNoteDeck, len(robberAccount.bankNoteDecks))
-		copy(bankNoteDecks, robberAccount.bankNoteDecks)
+		robberAccounts[index] = &RobberAccount{}
+		bankNoteDecks := make([]*BankNoteDeck, len(robberAccount.bankNoteDecks))
+		for idx, bankNoteDeck := range robberAccount.bankNoteDecks {
+			var tmpBankNoteDeck = bankNoteDeck.clone()
+			bankNoteDecks[idx] = &tmpBankNoteDeck
+		}
 		robberAccounts[index].bankNoteDecks = bankNoteDecks
 	}
 	return BankNoteSolution{robberAccounts}
+}
+
+func (bns BankNoteSolution) String() string {
+	var buffer bytes.Buffer
+	buffer.WriteString("{")
+	if bns.robberAccounts != nil {
+		buffer.WriteString("[")
+		raCount := len(bns.robberAccounts)
+		for index, item := range bns.robberAccounts {
+			if item != nil {
+				buffer.WriteString(item.String())
+			} else {
+				buffer.WriteString("nil")
+			}
+			if index < raCount-1 {
+				buffer.WriteString(", ")
+			}
+		}
+		buffer.WriteString("]")
+	} else {
+		buffer.WriteString("nil")
+	}
+	buffer.WriteString("}")
+	return buffer.String()
 }
 
 func mutateFuncGenerator(maxMutateCount, maxAttemptCount int) func(*BankNoteSolution, float64) error {

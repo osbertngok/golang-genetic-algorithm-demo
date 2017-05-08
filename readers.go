@@ -28,7 +28,10 @@ func readBankNoteDecks(reader io.Reader, bnp *BankNoteProblem) error {
 	if _, err := fmt.Fscanf(reader, "%d\n", &bankNoteDeckCount); err != nil {
 		return err
 	}
-	bnp.bankNoteDecks = make([]BankNoteDeck, bankNoteDeckCount)
+	bnp.bankNoteDecks = make([]*BankNoteDeck, bankNoteDeckCount)
+	for index := range bnp.bankNoteDecks {
+		bnp.bankNoteDecks[index] = &BankNoteDeck{}
+	}
 	// Assuming the first value is the face value, the second is the quantity
 	for i := 0; i < bankNoteDeckCount; i++ {
 		if _, err := fmt.Fscanf(reader, "%f %d\n", &bnp.bankNoteDecks[i].faceValue, &bnp.bankNoteDecks[i].quantity); err != nil {

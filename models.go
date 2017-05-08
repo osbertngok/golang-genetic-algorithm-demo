@@ -12,16 +12,16 @@ type BankNoteDeck struct {
 // as well as the available bank note decks.
 type BankNoteProblem struct {
 	robberShare   []int
-	bankNoteDecks []BankNoteDeck
+	bankNoteDecks []*BankNoteDeck
 }
 
 // RobberAccount is simply a pile of BankNoteDecks;
 // Each of the BankNoteDeck should have different face value of bank notes.
 type RobberAccount struct {
-	bankNoteDecks []BankNoteDeck
+	bankNoteDecks []*BankNoteDeck
 }
 
 // BankNoteSolution is a solution to its corresponding BankNoteProblem.
 type BankNoteSolution struct {
-	robberAccounts []RobberAccount
+	robberAccounts []*RobberAccount
 }

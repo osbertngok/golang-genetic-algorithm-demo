@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-func averageFaceValue(bankNoteDecks *[]BankNoteDeck) (float64, error) {
+func averageFaceValue(bankNoteDecks *[]*BankNoteDeck) (float64, error) {
 	sumOfCashValue := 0.0
 	sumOfQuantity := 0
 	for _, deck := range *bankNoteDecks {
